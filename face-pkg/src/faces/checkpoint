@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/giraff3/catkin_ws/src/tfgs/AsunAlsina/faces/src/faces/face-rec-model"
+all_model_checkpoint_paths: "/home/giraff3/catkin_ws/src/tfgs/AsunAlsina/faces/src/faces/face-rec-model"

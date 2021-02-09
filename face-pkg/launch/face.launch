@@ -1,0 +1,36 @@
+<launch>
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen">
+    <param name="video_device" value="/dev/video0" />
+    <param name="image_width" value="640" />
+    <param name="image_heigh" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap" />
+  </node>
+
+  <node name="detection" pkg="faces" type="detection.py" />
+  <node name="recognition" pkg="faces" type="recognition.py" />
+  
+  
+  <arg name="move_robot" default="true" />
+
+  <include file="$(find missions_pkg)/launch/giraff/giraff_keyboard_control.launch" if="$(arg move_robot)" />
+  <include file="$(find missions_pkg)/launch/giraff/giraff_giraff_ros_driver.launch" if="$(arg move_robot)" />
+
+  <node pkg="mqtt_bridge" type="mqtt_bridge_node" name="mqtt_bridge" respawn="false" output="screen">
+    <param name="host" value="150.214.109.137"/>    ### server IP
+    <param name="port" value="8002"/>               ### server port
+    <param name="username" value="mapir"/>
+    <param name="password" value="mapir236"/>
+    <param name="MQTT_topicName" value="UMA_Sancho"/>    
+    <!-- <param name="MQTT_topics_subscribe" value= "NavigationCommand,TopologyCommand,ClientACK,ServerACK" /> -->
+    <param name="MQTT_topics_subscribe" value= "NavigationCommand,TopologyCommand,ClientACK,ServerACK" /> 
+  </node>
+
+  
+  <node pkg="speech" type="speech_node" name="speech" respawn="false" output="screen">
+        <param name="mqtt_topic" value="TTS"/>
+	<param name="script_id" value="cblgkepjcjcdohabfgkeplcckihcopof"/> <!-- ID of the GCSS taken from chrome://extensions/ -> ID -->
+  </node>
+
+</launch>
